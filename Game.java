@@ -9,27 +9,41 @@ import java.util.Random;
 
 public class Game {
     public static void main(String[] args) {
+        //Variables
+        int times = 0;
         //ArrayList for Players
         Scanner myName = new Scanner(System.in);
-        ArrayList<UUID> playerNames = new ArrayList<UUID>();
-        //UUID id = playerNames.getUniqueID();
-        for(int i = 0; i < 5; i++) {
-            playerNames.add(playerNames);
-        }
+        ArrayList<String> playerNames = new ArrayList<String>();
 
+        playerNames.add();
+        
+
+        //Timer
+        /*Timer timer = new Timer();
+		    TimerTask task = new Helper();
+        while(times < 5) {
+        timer.schedule(task, 1000, 1000);
+        times++;
+        
+        }
+        timer.cancel();
+        */
         //Random number generator
         Random num = new Random();
         int ranNum;
-        //
+
+        //For loop runs through arrayList||Implements ranNum generator 
         for (int j = 0; j < playerNames.size(); j++) {
           for(int i = 0; i < 20; i++) {
               ranNum = num.nextInt(3);
               System.out.println(ranNum);
           }
 
-          if(ranNum == 1) {
+          /*if(ranNum == 1) {
             
-        } 
+          } else {
+            
+          }*/
       }
 
     }
@@ -62,9 +76,13 @@ public class Game {
       }*/
 }
 
-/*class Helper extends TimerTask {
-    
-}*/
+class Helper extends TimerTask {
+  public static int i = 0;
+  public void run() {
+      System.out.println("Timer ran: " + ++i);     
+  }
+}
+
 
     
 
