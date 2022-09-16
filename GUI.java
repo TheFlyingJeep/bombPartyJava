@@ -24,7 +24,7 @@ public class GUI {
         playerSeven = new JLabel("Player 7");
         playerEight = new JLabel("Player 8");
         timer = new JLabel("timer");
-        lettersLeft = new JLabel("<html>A B C D E F G H I J K L<br/>M N O P Q R S T U V</html>");
+        letters = new JLabel("<html>A B C D E F G H I J K L<br/>M N O P Q R S T U V</html>");
         playerInput = new JTextField(10);
         enter = new JButton("Enter");
 
@@ -42,7 +42,7 @@ public class GUI {
         frame.add(playerSix);
         frame.add(playerSeven);
         frame.add(playerEight);
-        frame.add(lettersLeft);
+        frame.add(letters);
         frame.add(playerInput);
         frame.add(enter);
 
@@ -81,7 +81,7 @@ public class GUI {
     }
 
     //returns player's input aka player's guess
-    public String getGuess(){
+    public String sendGuess(){
         return guess;
     }
 
