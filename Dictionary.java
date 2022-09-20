@@ -7,6 +7,7 @@ import java.util.ArrayList;
 class Dictionary{
 
     String word= "";
+
     static ArrayList<String> usedWords = new ArrayList<String>();
     static ArrayList<String> usedPrompts = new ArrayList<String>();
 
@@ -20,6 +21,7 @@ class Dictionary{
 
 
     public boolean checkWord(String input){
+        String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         input = input.toUpperCase();
         int start = 0;
         int stop = 0;
@@ -116,7 +118,7 @@ class Dictionary{
             stop = 57865;
         }
         else if(input.charAt(0) == 'X'){
-            start = 57866;
+            start = 57865;
             stop = 57879;
         }
         else if(input.charAt(0) == 'Y'){
@@ -132,15 +134,31 @@ class Dictionary{
             File file = new File("C:/JavaPrograms/InteliJ/bomb game/src/dictionary.txt");
 
             // Scanner scan = new Scanner(file);
-            while (start <= stop) {
-                String line = Files.readAllLines(Paths.get("C:/JavaPrograms/InteliJ/bomb game/src/dictionary.txt")).get(start);
-                System.out.println(line);
-                if(input.equals(line)){
-                    return true;
+            if(alphabet.indexOf(input.charAt(1)) < 12) {
+                while (start <= stop) {
+                    String line = Files.readAllLines(Paths.get("C:/JavaPrograms/InteliJ/bomb game/src/dictionary.txt")).get(start);
+                    System.out.println(input.charAt(1));
+                    if (input.equals(line)) {
+                        return true;
+                    }
+                    start++;
                 }
-                start++;
+                return false;
             }
-            return false;
+            else{
+                int temp = start;
+                start = stop;
+                stop = temp;
+                while (start >= stop) {
+                    String line = Files.readAllLines(Paths.get("C:/JavaPrograms/InteliJ/bomb game/src/dictionary.txt")).get(start);
+                    System.out.println(line);
+                    if (input.equals(line)) {
+                        return true;
+                    }
+                    start--;
+                }
+                return false;
+            }
 
         } catch (Exception e){
             e.printStackTrace();
@@ -177,6 +195,5 @@ class Dictionary{
         return true;
     }
 }
-
 
 
