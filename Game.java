@@ -10,6 +10,7 @@ public class Game{
     public static void main(String[] args) {
         //Variables
         int times = 0;
+        int timerLength = 0;
 
         //ArrayList for Players
         Scanner myName = new Scanner(System.in);
@@ -24,25 +25,29 @@ public class Game{
         
         //Random number generator//
         Random num = new Random();
-        int ranNum;
+        int ranNum = 0;
 
-        //For loop runs through arrayList||Implements ranNum generator// 
-        for (int j = 0; j < playerNames.size(); j++) {
+        //For loop runs through arrayList||Implements ranNum generator, if num=1 end players turn, if num=2,3 add seconds// 
+        //for (int j = 0; j < playerNames.size(); j++) {
           for(int i = 0; i < 20; i++) {
               ranNum = num.nextInt(3);
               System.out.println(ranNum);
           }
-          /*if(ranNum == 1) {
-            
+          if(ranNum == 1) {
+            timerLength = 0;
           } else {
-            
-          }*/
+            timerLength += 5;
+          }
       }
 
-    }
+    
 
     
     public void sendPlayerData(){
+
+    }
+
+    public void getPlayers(){
 
     }
     /*public static String prompt(){
@@ -71,10 +76,11 @@ public class Game{
       }*/
 }
 
+//Timer class//
 class Timer implements Runnable{
   @Override
   public void run(){
-    for(int i = 0; i < 5; i++) {
+    for(int i = 5; i > 0; i--) {
       try {
         Thread.sleep(1000);
         System.out.println(i);
@@ -85,12 +91,12 @@ class Timer implements Runnable{
   }
 }
 
-  
+class Player {
+  String playerName;
+  public void getPlayer(String playerName){
+    this.playerName = playerName;
+  }
+  //return this.playerName;
+}
 
-
-
-    
-
-
-    
 
