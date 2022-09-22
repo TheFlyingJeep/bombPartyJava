@@ -1,22 +1,28 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.*;
 import java.util.ArrayList;
+import javax.imageio.*;
+import java.io.File;
+import java.io.IOException;
 
 public class GUI {
-    JFrame frame;
+    JFrame gameFrame;
     GridLayout grid;
-    JLabel playerOne, playerTwo, playerThree, playerFour, playerFive, playerSix, playerSeven, playerEight, timer,
+    JLabel playerOne, playerTwo, playerThree, playerFour, playerFive, playerSix, playerSeven, playerEight, bomb,
             letters, wordDisplay, credits, hearts, logo;
     JTextField playerInput;
     JButton enter;
 
     String guess, lettersLeftDisplay;
     ArrayList<String> lettersLeft = new ArrayList<String>();
+    boolean gameScreen = true;
+    boolean menuScreen = true;
 
     //building game window
     public GUI(){
-        frame = new JFrame("Bomb Party (Java)");
+        gameFrame = new JFrame("blow up bash!");
         grid = new GridLayout(6,3); //row, columns
         playerOne = new JLabel("Player 1");
         playerTwo = new JLabel("Player 2");
@@ -26,36 +32,46 @@ public class GUI {
         playerSix = new JLabel("Player 6");
         playerSeven = new JLabel("Player 7");
         playerEight = new JLabel("Player 8");
-        timer = new JLabel("timer");
+        bomb = new JLabel("bomb");
         letters = new JLabel("<html>A B C D E F G H I J K<br/>L M N O P Q R S T U</html>");
+        //resizing image to fit
+        //hearts = new JLabel();
+        BufferedImage img = null;
+        try {
+            img = ImageIO.read(new File("images/heart.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Image dimg = img.getScaledInstance(50, 50, Image.SCALE_SMOOTH); //resize dimensions currently hardcoded
+        ImageIcon imageIcon = new ImageIcon(dimg);
+        hearts = new JLabel(imageIcon);
+        logo = new JLabel("blow up bash!");
+        credits = new JLabel("blow up bash! was inspired by JKLM's BombParty");
         playerInput = new JTextField();
         enter = new JButton("Enter");
         wordDisplay = new JLabel(guess);
-        credits = new JLabel("BombParty (Java) was inspired by JKLM's BombParty");
-        hearts = new JLabel("hearts");
-        logo = new JLabel("blow up bash!");
 
-        frame.setSize(700,500); //width, height
-        frame.setLayout(grid);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);
+        gameFrame.setSize(700,500); //width, height
+        gameFrame.setLayout(grid);
+        gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        gameFrame.setVisible(gameScreen);
 
-        frame.add(playerOne);
-        frame.add(playerTwo);
-        frame.add(playerThree);
-        frame.add(playerFour);
-        frame.add(timer);
-        frame.add(playerFive);
-        frame.add(playerSix);
-        frame.add(playerSeven);
-        frame.add(playerEight);
-        frame.add(letters);
-        frame.add(hearts);
-        frame.add(logo);
-        frame.add(credits);
-        frame.add(playerInput);
-        frame.add(enter);
-        frame.add(wordDisplay);
+        gameFrame.add(playerOne);
+        gameFrame.add(playerTwo);
+        gameFrame.add(playerThree);
+        gameFrame.add(playerFour);
+        gameFrame.add(bomb);
+        gameFrame.add(playerFive);
+        gameFrame.add(playerSix);
+        gameFrame.add(playerSeven);
+        gameFrame.add(playerEight);
+        gameFrame.add(letters);
+        gameFrame.add(hearts);
+        gameFrame.add(logo);
+        gameFrame.add(credits);
+        gameFrame.add(playerInput);
+        gameFrame.add(enter);
+        gameFrame.add(wordDisplay);
 
         enter.setActionCommand("enter");
         enter.addActionListener(new enterButtonListener());
