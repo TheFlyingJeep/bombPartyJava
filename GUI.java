@@ -15,10 +15,12 @@ public class GUI {
     JTextField playerInput;
     JButton enter;
 
-    String guess, lettersLeftDisplay;
+    String pInput, cvInput;
+    String lettersLeftDisplay = "<html>A B C D E F G H I J K<br/>L M N O P Q R S T U</html>";
     ArrayList<String> lettersLeft = new ArrayList<String>();
     boolean gameScreen = true;
     boolean menuScreen = true;
+    boolean isInValid = true;
 
     //building game window
     public GUI(){
@@ -33,7 +35,7 @@ public class GUI {
         playerSeven = new JLabel("Player 7");
         playerEight = new JLabel("Player 8");
         bomb = new JLabel("bomb");
-        letters = new JLabel("<html>A B C D E F G H I J K<br/>L M N O P Q R S T U</html>");
+        letters = new JLabel(lettersLeftDisplay);
         //resizing image to fit
         //hearts = new JLabel();
         BufferedImage img = null;
@@ -49,7 +51,7 @@ public class GUI {
         credits = new JLabel("blow up bash! was inspired by JKLM's BombParty");
         playerInput = new JTextField();
         enter = new JButton("Enter");
-        wordDisplay = new JLabel(guess);
+        wordDisplay = new JLabel(pInput);
 
         gameFrame.setSize(700,500); //width, height
         gameFrame.setLayout(grid);
@@ -83,8 +85,8 @@ public class GUI {
     //action listener for enter key
     class enterKeyListener implements ActionListener{
         public void actionPerformed(ActionEvent event){
-            guess = playerInput.getText();
-            System.out.println(guess);
+            pInput = playerInput.getText();
+            System.out.println(pInput);
             playerInput.setText("");
             refresh();
         }
@@ -93,31 +95,50 @@ public class GUI {
     //action listener for enter button
     class enterButtonListener implements ActionListener{
         public void actionPerformed(ActionEvent event){
-            guess = playerInput.getText();
-            System.out.println(guess);
+            pInput = playerInput.getText();
+            System.out.println(pInput);
             playerInput.setText("");
             refresh();
         }
     }
 
     //updates the letters display on GUI
-    public void updateLetters(){
+    public void updateLetters(ArrayList lettersUnused){
         //params: letters unused by player from Player class
-        for(int i = 0; i < lettersLeft.size(); i++){
-            lettersLeftDisplay += lettersLeft.get(i);
-            System.out.println(lettersLeftDisplay);
+        for(int i = 0; i < lettersUnused.size(); i++){
+            lettersLeft.add(lettersUnused.get(i).toString());
+            //System.out.println(lettersLeft.get(i));
         }
+
+        for(int j = 0; j < lettersLeft.size(); j++){
+            lettersLeftDisplay += lettersLeft.get(j).toString();
+        }
+        letters.setText(lettersLeftDisplay); //displays letters left player's screen
         refresh();
     }
 
     //refreshes GUI
     public void refresh(){
-        wordDisplay.setText(guess); //displays word inputed on screens
+        System.out.println(isValid());
+        wordDisplay.setText(pInput); //displays word inputed on screens
+    }
+
+    //checks if input is single word
+    public boolean isValid(){
+        String temp = pInput.trim();
+        if(temp.isEmpty() || (temp.contains(" "))){
+            isInValid = false;
+        } else {
+            isInValid = true;
+            temp = "";
+            cvInput = temp;
+        }
+        return isInValid;
     }
 
     //returns player's input aka player's guess
-    public String sendGuess(){
-        return guess;
+    public String sendCVInput(){
+        return cvInput;
     }
 
     public static void main(String[] args){
