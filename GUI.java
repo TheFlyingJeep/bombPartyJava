@@ -15,7 +15,7 @@ public class GUI {
     JTextField playerInput;
     JButton enter;
 
-    String pInput, cvInput;
+    String pInput, cInput;
     String lettersLeftDisplay = "<html>A B C D E F G H I J K<br/>L M N O P Q R S T U</html>";
     ArrayList<String> lettersLeft = new ArrayList<String>();
     boolean gameScreen = true;
@@ -120,7 +120,7 @@ public class GUI {
     //refreshes GUI
     public void refresh(){
         System.out.println(isValid());
-        wordDisplay.setText(pInput); //displays word inputed on screens
+        wordDisplay.setText(cInput); //displays word inputed on screens
     }
 
     //checks if input is single word
@@ -130,15 +130,15 @@ public class GUI {
             isInValid = false;
         } else {
             isInValid = true;
-            temp = "";
-            cvInput = temp;
         }
+        cInput = temp;
+        System.out.println(cInput);
         return isInValid;
     }
 
-    //returns player's input aka player's guess
-    public String sendCVInput(){
-        return cvInput;
+    //returns player's input aka player's guess once it has been checked
+    public String sendCInput(){
+        return cInput;
     }
 
     public static void main(String[] args){
