@@ -106,13 +106,10 @@ public class GUI {
     public void updateLetters(ArrayList lettersUnused){
         //params: letters unused by player from Player class
         for(int i = 0; i < lettersUnused.size(); i++){
-            lettersLeft.add(lettersUnused.get(i).toString());
+            lettersLeftDisplay += lettersUnused.get(j);
             //System.out.println(lettersLeft.get(i));
         }
 
-        for(int j = 0; j < lettersLeft.size(); j++){
-            lettersLeftDisplay += lettersLeft.get(j).toString();
-        }
         letters.setText(lettersLeftDisplay); //displays letters left player's screen
         refresh();
     }
@@ -124,6 +121,7 @@ public class GUI {
     }
 
     //checks if input is single word
+    //trims player's raw input
     public boolean isValid(){
         String temp = pInput.trim();
         if(temp.isEmpty() || (temp.contains(" "))){
