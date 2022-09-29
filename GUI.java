@@ -106,7 +106,7 @@ public class GUI {
     public void updateLetters(ArrayList lettersUnused){
         //params: letters unused by player from Player class
         for(int i = 0; i < lettersUnused.size(); i++){
-            lettersLeftDisplay += lettersUnused.get(j);
+            lettersLeftDisplay += lettersUnused.get(i);
             //System.out.println(lettersLeft.get(i));
         }
 
@@ -132,6 +132,11 @@ public class GUI {
         cInput = temp;
         System.out.println(cInput);
         return isInValid;
+    }
+
+    public void resetGuesses(){
+        cInput = "";
+        pInput = "";
     }
 
     //returns player's input aka player's guess once it has been checked
