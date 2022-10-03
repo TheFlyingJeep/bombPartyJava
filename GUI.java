@@ -40,11 +40,11 @@ public class GUI {
         //hearts = new JLabel();
         BufferedImage img = null;
         try {
-            img = ImageIO.read(new File("images/heart.png"));
+            img = ImageIO.read(new File("images/threeHearts.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Image dimg = img.getScaledInstance(50, 50, Image.SCALE_SMOOTH); //resize dimensions currently hardcoded
+        Image dimg = img.getScaledInstance(225, 150, Image.SCALE_SMOOTH); //resize dimensions currently hardcoded
         ImageIcon imageIcon = new ImageIcon(dimg);
         hearts = new JLabel(imageIcon);
         logo = new JLabel("blow up bash!");
@@ -137,6 +137,50 @@ public class GUI {
     public void resetGuesses(){
         cInput = "";
         pInput = "";
+    }
+
+    public void updateLives(int lives){
+        if(lives >= 3){
+            BufferedImage img = null;
+            try {
+                img = ImageIO.read(new File("images/threeHearts.png"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Image dimg = img.getScaledInstance(225, 150, Image.SCALE_SMOOTH); //resize dimensions currently hardcoded
+            ImageIcon imageIcon = new ImageIcon(dimg);
+            hearts = new JLabel(imageIcon);
+        } else if(lives == 2){
+            BufferedImage img = null;
+            try {
+                img = ImageIO.read(new File("images/twoHearts.png"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Image dimg = img.getScaledInstance(225, 150, Image.SCALE_SMOOTH); //resize dimensions currently hardcoded
+            ImageIcon imageIcon = new ImageIcon(dimg);
+            hearts = new JLabel(imageIcon);
+        } else if(lives == 1){
+            BufferedImage img = null;
+            try {
+                img = ImageIO.read(new File("images/oneHearts.png"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Image dimg = img.getScaledInstance(225, 150, Image.SCALE_SMOOTH); //resize dimensions currently hardcoded
+            ImageIcon imageIcon = new ImageIcon(dimg);
+            hearts = new JLabel(imageIcon);
+        } else {
+            BufferedImage img = null;
+            try {
+                img = ImageIO.read(new File("images/zeroHearts.png"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Image dimg = img.getScaledInstance(225, 150, Image.SCALE_SMOOTH); //resize dimensions currently hardcoded
+            ImageIcon imageIcon = new ImageIcon(dimg);
+            hearts = new JLabel(imageIcon);
+        }
     }
 
     //returns player's input aka player's guess once it has been checked
