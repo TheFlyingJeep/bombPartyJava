@@ -11,7 +11,7 @@ public class GUI {
     JFrame gameFrame;
     GridLayout grid;
     JLabel playerOne, playerTwo, playerThree, playerFour, playerFive, playerSix, playerSeven, playerEight, bomb,
-            letters, wordDisplay, credits, hearts, logo;
+            letters, wordDisplay, credits, hearts, logo, prompt;
     JTextField playerInput;
     JButton enter;
 
@@ -19,11 +19,13 @@ public class GUI {
     String lettersLeftDisplay = "<html>A B C D E F G H I J K<br/>L M N O P Q R S T U</html>";
     ArrayList<String> lettersLeft = new ArrayList<String>();
     boolean gameScreen = true;
-    boolean menuScreen = true;
+    //boolean nameScreen = true;
+    //boolean restartScreen = false;
     boolean isInValid = true;
 
     //building game window
     public GUI(){
+        //game screen
         gameFrame = new JFrame("blow up bash!");
         grid = new GridLayout(6,3); //row, columns
         playerOne = new JLabel("Player 1");
@@ -52,6 +54,7 @@ public class GUI {
         playerInput = new JTextField();
         enter = new JButton("Enter");
         wordDisplay = new JLabel(pInput);
+        prompt = new JLabel();
 
         gameFrame.setSize(700,500); //width, height
         gameFrame.setLayout(grid);
@@ -74,6 +77,7 @@ public class GUI {
         gameFrame.add(playerInput);
         gameFrame.add(enter);
         gameFrame.add(wordDisplay);
+        gameFrame.add(prompt);
 
         enter.setActionCommand("enter");
         enter.addActionListener(new enterButtonListener());
@@ -109,9 +113,13 @@ public class GUI {
             lettersLeftDisplay += lettersUnused.get(i);
             //System.out.println(lettersLeft.get(i));
         }
-
         letters.setText(lettersLeftDisplay); //displays letters left player's screen
         refresh();
+    }
+
+    //sets Player# labels to player names
+    public void setNames(){
+        //parameter will be either array or string w/ commas
     }
 
     //refreshes GUI
@@ -120,8 +128,11 @@ public class GUI {
         wordDisplay.setText(cInput); //displays word inputed on screens
     }
 
-    //checks if input is single word
-    //trims player's raw input
+    public void setPrompt(String p){
+        prompt.setText(p);
+    }
+
+    //checks if input is single word + trims player's raw input
     public boolean isValid(){
         String temp = pInput.trim();
         if(temp.isEmpty() || (temp.contains(" "))){
@@ -134,54 +145,15 @@ public class GUI {
         return isInValid;
     }
 
+    //resets guess strings
     public void resetGuesses(){
         cInput = "";
         pInput = "";
     }
 
-    public void updateLives(int lives){
-        if(lives >= 3){
-            BufferedImage img = null;
-            try {
-                img = ImageIO.read(new File("images/threeHearts.png"));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            Image dimg = img.getScaledInstance(225, 150, Image.SCALE_SMOOTH); //resize dimensions currently hardcoded
-            ImageIcon imageIcon = new ImageIcon(dimg);
-            hearts = new JLabel(imageIcon);
-        } else if(lives == 2){
-            BufferedImage img = null;
-            try {
-                img = ImageIO.read(new File("images/twoHearts.png"));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            Image dimg = img.getScaledInstance(225, 150, Image.SCALE_SMOOTH); //resize dimensions currently hardcoded
-            ImageIcon imageIcon = new ImageIcon(dimg);
-            hearts = new JLabel(imageIcon);
-        } else if(lives == 1){
-            BufferedImage img = null;
-            try {
-                img = ImageIO.read(new File("images/oneHearts.png"));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            Image dimg = img.getScaledInstance(225, 150, Image.SCALE_SMOOTH); //resize dimensions currently hardcoded
-            ImageIcon imageIcon = new ImageIcon(dimg);
-            hearts = new JLabel(imageIcon);
-        } else {
-            BufferedImage img = null;
-            try {
-                img = ImageIO.read(new File("images/zeroHearts.png"));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            Image dimg = img.getScaledInstance(225, 150, Image.SCALE_SMOOTH); //resize dimensions currently hardcoded
-            ImageIcon imageIcon = new ImageIcon(dimg);
-            hearts = new JLabel(imageIcon);
-        }
-    }
+//    public void updateLives(int lives){
+//
+//    }
 
     //returns player's input aka player's guess once it has been checked
     public String sendCInput(){
