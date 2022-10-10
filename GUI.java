@@ -54,7 +54,7 @@ public class GUI {
         playerInput = new JTextField();
         enter = new JButton("Enter");
         wordDisplay = new JLabel(pInput);
-        prompt = new JLabel();
+        prompt = new JLabel("prompt");
 
         gameFrame.setSize(700,500); //width, height
         gameFrame.setLayout(grid);
@@ -90,7 +90,8 @@ public class GUI {
     class enterKeyListener implements ActionListener{
         public void actionPerformed(ActionEvent event){
             pInput = playerInput.getText();
-            System.out.println(pInput);
+            System.out.println(pInput); //debug print
+            System.out.println(isValid()); //debug print
             playerInput.setText("");
             refresh();
         }
@@ -100,7 +101,8 @@ public class GUI {
     class enterButtonListener implements ActionListener{
         public void actionPerformed(ActionEvent event){
             pInput = playerInput.getText();
-            System.out.println(pInput);
+            System.out.println(pInput); //debug print
+            System.out.println(isValid()); //debug print
             playerInput.setText("");
             refresh();
         }
@@ -124,10 +126,10 @@ public class GUI {
 
     //refreshes GUI
     public void refresh(){
-        System.out.println(isValid());
         wordDisplay.setText(cInput); //displays word inputed on screens
     }
 
+    //sets prompt text
     public void setPrompt(String p){
         prompt.setText(p);
     }
@@ -145,19 +147,20 @@ public class GUI {
         return isInValid;
     }
 
-    //resets guess strings
-    public void resetGuesses(){
-        cInput = "";
-        pInput = "";
-    }
+    //changes the image of hearts based on # lives the player has
+    public void updateLives(int lives){
 
-//    public void updateLives(int lives){
-//
-//    }
+    }
 
     //returns player's input aka player's guess once it has been checked
     public String sendCInput(){
         return cInput;
+    }
+
+    //resets guess strings
+    public void resetGuesses(){
+        cInput = "";
+        pInput = "";
     }
 
     public static void main(String[] args){
