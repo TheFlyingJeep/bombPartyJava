@@ -25,6 +25,10 @@ public class GUI {
 
     //building game window
     public GUI(){
+        createGameWindow();
+    }
+
+    public void createGameWindow(){
         //game screen
         gameFrame = new JFrame("blow up bash!");
         grid = new GridLayout(6,3); //row, columns
@@ -91,7 +95,7 @@ public class GUI {
         public void actionPerformed(ActionEvent event){
             pInput = playerInput.getText();
             System.out.println(pInput); //debug print
-            System.out.println(isValid()); //debug print
+            //System.out.println(isValid()); //debug print
             playerInput.setText("");
             refresh();
         }
@@ -102,7 +106,7 @@ public class GUI {
         public void actionPerformed(ActionEvent event){
             pInput = playerInput.getText();
             System.out.println(pInput); //debug print
-            System.out.println(isValid()); //debug print
+            //System.out.println(isValid()); //debug print
             playerInput.setText("");
             refresh();
         }
@@ -120,13 +124,14 @@ public class GUI {
     }
 
     //sets Player# labels to player names
-    public void setNames(){
-        //parameter will be either array or string w/ commas
+    public void setNames(String names){
+        //parameter will be name split by commas
+
     }
 
     //refreshes GUI
     public void refresh(){
-        wordDisplay.setText(cInput); //displays word inputed on screens
+        wordDisplay.setText(pInput.trim()); //displays word inputed on screens
     }
 
     //sets prompt text
@@ -134,18 +139,18 @@ public class GUI {
         prompt.setText(p);
     }
 
-    //checks if input is single word + trims player's raw input
-    public boolean isValid(){
-        String temp = pInput.trim();
-        if(temp.isEmpty() || (temp.contains(" "))){
-            isInValid = false;
-        } else {
-            isInValid = true;
-        }
-        cInput = temp;
-        System.out.println(cInput);
-        return isInValid;
-    }
+//    //checks if input is single word + trims player's raw input
+//    public boolean isValid(){
+//        String temp = pInput.trim();
+//        if(temp.isEmpty() || (temp.contains(" "))){
+//            isInValid = false;
+//        } else {
+//            isInValid = true;
+//        }
+//        cInput = temp;
+//        System.out.println(cInput);
+//        return isInValid;
+//    }
 
     //changes the image of hearts based on # lives the player has
     public void updateLives(int lives){
@@ -154,6 +159,12 @@ public class GUI {
 
     //returns player's input aka player's guess once it has been checked
     public String sendCInput(){
+        if(pInput.equals(null)){
+            cInput = "";
+        } else {
+            cInput = pInput.trim();
+        }
+        System.out.println(cInput);
         return cInput;
     }
 
