@@ -95,9 +95,9 @@ public class GUI {
         public void actionPerformed(ActionEvent event){
             pInput = playerInput.getText();
             System.out.println(pInput); //debug print
-            //System.out.println(isValid()); //debug print
             playerInput.setText("");
             refresh();
+            updateLives(0);
         }
     }
 
@@ -106,9 +106,9 @@ public class GUI {
         public void actionPerformed(ActionEvent event){
             pInput = playerInput.getText();
             System.out.println(pInput); //debug print
-            //System.out.println(isValid()); //debug print
             playerInput.setText("");
             refresh();
+            updateLives(2);
         }
     }
 
@@ -124,12 +124,19 @@ public class GUI {
     }
 
     //sets Player# labels to player names
-    public void setNames(String names){
+    public void setNames(String[] names){
         //parameter will be name split by commas
-
+        playerOne.setText(names[1]);
+        playerTwo.setText(names[2]);
+        playerThree.setText(names[3]);
+        playerFour.setText(names[4]);
+        playerFive.setText(names[5]);
+        playerSix.setText(names[6]);
+        playerSeven.setText(names[7]);
+        playerEight.setText(names[8]);
     }
 
-    //refreshes GUI
+    //global (?) refreshes GUI
     public void refresh(){
         wordDisplay.setText(pInput.trim()); //displays word inputed on screens
     }
@@ -139,27 +146,42 @@ public class GUI {
         prompt.setText(p);
     }
 
-//    //checks if input is single word + trims player's raw input
-//    public boolean isValid(){
-//        String temp = pInput.trim();
-//        if(temp.isEmpty() || (temp.contains(" "))){
-//            isInValid = false;
-//        } else {
-//            isInValid = true;
-//        }
-//        cInput = temp;
-//        System.out.println(cInput);
-//        return isInValid;
-//    }
-
     //changes the image of hearts based on # lives the player has
     public void updateLives(int lives){
-
+        BufferedImage img = null;
+        if(lives == 3) {
+            try {
+                img = ImageIO.read(new File("images/threeHearts.png"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else if(lives == 2) {
+            try {
+                img = ImageIO.read(new File("images/twoHearts.png"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else if(lives == 1) {
+            try {
+                img = ImageIO.read(new File("images/oneHeart.png"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                img = ImageIO.read(new File("images/zeroHearts.png"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        Image dimg = img.getScaledInstance(225, 150, Image.SCALE_SMOOTH); //resize dimensions currently hardcoded
+        ImageIcon imageIcon = new ImageIcon(dimg);
+        hearts.setIcon(imageIcon);
     }
 
     //returns player's input aka player's guess once it has been checked
     public String sendCInput(){
-        if(pInput.equals(null)){
+        if(pInput == null){
             cInput = "";
         } else {
             cInput = pInput.trim();
