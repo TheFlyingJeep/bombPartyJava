@@ -8,26 +8,72 @@ import java.io.File;
 import java.io.IOException;
 
 public class GUI {
-    JFrame gameFrame;
+    JFrame gameFrame, nameFrame;
     GridLayout grid;
-    JLabel playerOne, playerTwo, playerThree, playerFour, playerFive, playerSix, playerSeven, playerEight, bomb,
+    JLabel namePrompt, playerOne, playerTwo, playerThree, playerFour, playerFive, playerSix, playerSeven, playerEight, bomb,
             letters, wordDisplay, credits, hearts, logo, prompt;
-    JTextField playerInput;
-    JButton enter;
+    JTextField nameInput, playerInput;
+    JButton enterNameButton, enterButton;
+    JPanel panelName;
 
     String pInput, cInput;
     String lettersLeftDisplay = "<html>A B C D E F G H I J K<br/>L M N O P Q R S T U</html>";
     ArrayList<String> lettersLeft = new ArrayList<String>();
-    boolean gameScreen = true;
-    //boolean nameScreen = true;
-    //boolean restartScreen = false;
     boolean isInValid = true;
 
     //building game window
     public GUI(){
+        createNameWindow();
         createGameWindow();
     }
 
+    //name input window
+    public void createNameWindow() {
+        nameFrame = new JFrame("blow up bash!");
+        namePrompt = new JLabel("Enter Player name:");
+        nameInput = new JTextField(20);
+        panelName = new JPanel();
+        enterNameButton = new JButton("Enter");
+
+        nameFrame.getContentPane().add(BorderLayout.NORTH, panelName);
+        nameFrame.setSize(500,100);
+        nameFrame.setVisible(true);
+        nameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        panelName.add(namePrompt);
+        panelName.add(nameInput);
+        panelName.add(enterNameButton);
+
+        enterNameButton.setActionCommand("enterNameButton");
+        enterNameButton.addActionListener(new nameEnterButtonListener());
+
+        nameInput.setActionCommand("nameInput");
+        nameInput.addActionListener(new nameEnterKeyListener());
+    }
+
+    //action listener for enter button NAME SCREEN
+    class nameEnterButtonListener implements ActionListener{
+        public void actionPerformed(ActionEvent event){
+            String playerName = nameInput.getText();
+            nameInput.setText("");
+            System.out.println(playerName);
+            nameFrame.setVisible(false);
+            gameFrame.setVisible(true);
+        }
+    }
+
+    //action listener for enter key NAME SCREEN
+    class nameEnterKeyListener implements ActionListener{
+        public void actionPerformed(ActionEvent event){
+            String playerName = nameInput.getText();
+            nameInput.setText("");
+            System.out.println(playerName);
+            nameFrame.setVisible(false);
+            gameFrame.setVisible(true);
+        }
+    }
+
+    //game window
     public void createGameWindow(){
         //game screen
         gameFrame = new JFrame("blow up bash!");
@@ -56,14 +102,14 @@ public class GUI {
         logo = new JLabel("blow up bash!");
         credits = new JLabel("blow up bash! was inspired by JKLM's BombParty");
         playerInput = new JTextField();
-        enter = new JButton("Enter");
+        enterButton = new JButton("Enter");
         wordDisplay = new JLabel(pInput);
         prompt = new JLabel("prompt");
 
         gameFrame.setSize(700,500); //width, height
         gameFrame.setLayout(grid);
         gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        gameFrame.setVisible(gameScreen);
+        gameFrame.setVisible(false);
 
         gameFrame.add(playerOne);
         gameFrame.add(playerTwo);
@@ -79,18 +125,18 @@ public class GUI {
         gameFrame.add(logo);
         gameFrame.add(credits);
         gameFrame.add(playerInput);
-        gameFrame.add(enter);
+        gameFrame.add(enterButton);
         gameFrame.add(wordDisplay);
         gameFrame.add(prompt);
 
-        enter.setActionCommand("enter");
-        enter.addActionListener(new enterButtonListener());
+        enterButton.setActionCommand("enterButton");
+        enterButton.addActionListener(new enterButtonListener());
 
         playerInput.setActionCommand("playerInput");
         playerInput.addActionListener(new enterKeyListener());
     }
 
-    //action listener for enter key
+    //action listener for enter key IN GAME
     class enterKeyListener implements ActionListener{
         public void actionPerformed(ActionEvent event){
             pInput = playerInput.getText();
@@ -101,7 +147,7 @@ public class GUI {
         }
     }
 
-    //action listener for enter button
+    //action listener for enter button IN GAME
     class enterButtonListener implements ActionListener{
         public void actionPerformed(ActionEvent event){
             pInput = playerInput.getText();
@@ -111,6 +157,7 @@ public class GUI {
             updateLives(2);
         }
     }
+
 
     //updates the letters display on GUI
     public void updateLetters(ArrayList lettersUnused){
