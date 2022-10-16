@@ -10,6 +10,9 @@ public class Game{
   Timer timer;
   Dictionary dictionary;
     public static void main(String[] args) {
+      //make a method that calls dictionary class, .contains//
+
+      //Variables
 
         //ArrayList for Players
         Scanner myName = new Scanner(System.in);
@@ -20,6 +23,11 @@ public class Game{
         Thread thread = new Thread(timer);
         thread.start();
              
+        
+        //Random number generator//
+        Random num = new Random();
+        int ranNum = 0;
+
         //For loop runs through arrayList||Implements ranNum generator, if num=1 end players turn, if num=2,3 add seconds// 
         //for (int j = 0; j < playerNames.size(); j++) {
           for(int i = 0; i < 1; i++) {
@@ -35,6 +43,9 @@ public class Game{
         //}
       }
 
+    
+
+    
     public void sendPlayerData(){
 
     }
@@ -94,6 +105,7 @@ class Timer implements Runnable{
     }
   }
 }
+
 
 class Player {
   String playerName;
