@@ -13,7 +13,8 @@ class Player {
   Socket socket;
   String guess = "";
   Thread thread;
-  String prompt = "";
+  String data = "";
+  ArrayList<String> names = new ArrayList<String>();
 
   public Player(Socket socket1, String name) {
     playerName = name;
@@ -21,18 +22,25 @@ class Player {
     client = new Client(socket);
     thread = new Thread(client);
     thread.start();
+    try {
+      Thread.sleep(10);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
+    client.sendGuess(name);
+    // System.out.println("hello!");
     theLoop();
   }
 
   public void getGuess() {
-    if (gui.isValid()) {
-      guess = gui.sendCInput();
-      System.out.println(guess);
-      // gui.updateLives(lives - 1);
-      // System.out.println(lives);
-    }
-
+    // if (gui.isValid()) {
+    // guess = gui.sendCInput();
+    // System.out.println(guess);
+    // gui.updateLives(lives - 1);
+    // System.out.println(lives);
   }
+
+  // }
 
   public void letterAdd() {
     lettersAvail.add("A");
@@ -89,9 +97,11 @@ class Player {
       }
 
     }
-    for (String i : lettersAvail) {
-      System.out.print(i + " ");
-    }
+    /*
+     * for (String i : lettersAvail) {
+     * System.out.print(i + " ");
+     * }
+     */
     gui.updateLetters(lettersAvail);
     return lettersAvail;
   }
@@ -114,7 +124,7 @@ class Player {
   }
 
   public void sendLives() {
-    // gui.updateLives(lives);
+    gui.updateLives(lives);
   }
 
   public boolean sendTurn() {
@@ -122,23 +132,47 @@ class Player {
   }
 
   public void sendPrompts() {
-    gui.setPrompt(prompt);
+    gui.setPrompt(data);
+  }
+
+  public void sendNames(String[] names) {
+    gui.setNames(names);
   }
 
   public void theLoop() {
+    // System.out.print("is dead =" + isDead);
+
     while (!isDead) {
       guess = gui.sendCInput();
-      if (!guess.equalsIgnoreCase("")) {
-        System.out.println(guess);
-        client.sendGuess(playerName, guess);
-        gui.resetGuesses();
 
-        prompt = client.prompt;
-        sendPrompts();
-        for (int i = 0; i < lettersAvail.size(); i++) {
-          String elem = lettersAvail.get(i);
-          System.out.println(elem);
+      if (!guess.equalsIgnoreCase("")) {
+        if (guess != null) {
+          // System.out.println(guess);
         }
+        client.sendGuess(guess);
+        gui.resetGuesses();
+        // System.out.println("Hello!");
+        data = client.data;
+        String[] dataArr;
+
+        if (data != null) {
+          dataArr = data.split(",");
+        } else {
+          break;
+        }
+
+        if (dataArr[0].equals("names")) {
+          sendNames(dataArr);
+        }
+
+        if (dataArr[0].equals("lives")) {
+          sendLives();
+        }
+
+        if (dataArr[0].equals("correct")) {
+
+        }
+
       }
       try {
         Thread.sleep(10);
