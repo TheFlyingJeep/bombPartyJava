@@ -4,45 +4,37 @@ import java.rmi.server.UID;
 import java.util.*; 
 import java.util.Scanner;
 import java.util.Random;
+import java.util.TimerTask;
 
 public class Game{
   Timer timer;
+  Dictionary dictionary;
     public static void main(String[] args) {
-        //Variables
-        int times = 0;
-        int timerLength = 0;
 
         //ArrayList for Players
         Scanner myName = new Scanner(System.in);
         ArrayList<String> playerNames = new ArrayList<String>();
-        //playerNames.add();
         
         //Timer//
         Timer timer = new Timer();
         Thread thread = new Thread(timer);
         thread.start();
              
-        
-        //Random number generator//
-        Random num = new Random();
-        int ranNum = 0;
-
         //For loop runs through arrayList||Implements ranNum generator, if num=1 end players turn, if num=2,3 add seconds// 
         //for (int j = 0; j < playerNames.size(); j++) {
-          for(int i = 0; i < 20; i++) {
+          for(int i = 0; i < 1; i++) {
               ranNum = num.nextInt(3);
-              System.out.println(ranNum);
+              //System.out.println(ranNum);
           }
+
           if(ranNum == 1) {
-            timerLength = 0;
+            System.out.print("end");
           } else {
-            timerLength += 5;
+            //thread.start();
           }
+        //}
       }
 
-    
-
-    
     public void sendPlayerData(){
 
     }
@@ -77,12 +69,24 @@ public class Game{
 }
 
 //Timer class//
+
 class Timer implements Runnable{
   @Override
   public void run(){
-    for(int i = 5; i > 0; i--) {
+    for(int i = 30; i >= 0; i--) { 
       try {
         Thread.sleep(1000);
+        if (i == 0) {
+          System.out.println("0");
+          Random num = new Random();
+          int ranNum = 0;
+          ranNum = num.nextInt(3);
+          if (ranNum == 0 || ranNum == 1) {
+            break;
+          } else {
+            i +=5;
+          }
+        }
         System.out.println(i);
       } catch (InterruptedException e) {
         e.printStackTrace();
