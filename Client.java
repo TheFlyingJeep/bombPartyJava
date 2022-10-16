@@ -4,60 +4,48 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.InputStreamReader;
-import java.util.Scanner;
 
-public class Client{
+public class Client implements Runnable {
 
   private Socket socket;
   private BufferedReader bufferedReader;
   private BufferedWriter bufferedWriter;
-  private String username;
+  public String data = "";
 
-  public Client(Socket socket, String username) {
+  public Client(Socket socket) {
     try{
       this.socket = socket;
       this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-        this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-      this.username = username;
+      this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
     } catch (IOException e) {
       closeEverything(socket, bufferedReader, bufferedWriter);
     }
   }
 
-  public void sendMessage() {
+  public void sendGuess(String guess) {
     try {
-      bufferedWriter.write(username);
+      bufferedWriter.write(guess);
       bufferedWriter.newLine();
       bufferedWriter.flush();
-
-      Scanner scanner = new Scanner(System.in);
-      while (socket.isConnected()) {
-        String message = scanner.nextLine();
-        bufferedWriter.write(username + ": " + message);
-        bufferedWriter.newLine();
-        bufferedWriter.flush();
-      } 
     } catch (IOException e) {
       closeEverything(socket, bufferedReader, bufferedWriter);
     }
   }
 
-  public void messageListener() {
-    new Thread(new Runnable() {
-      @Override
-      public void run() {
-        String messageGotten;
-
-        while (socket.isConnected()) {
-          try {
-            messageGotten = bufferedReader.readLine();
-            System.out.println(messageGotten);
-          } catch (IOException e) {
-            closeEverything(socket, bufferedReader, bufferedWriter);
-          }
+  public void run() {
+    System.out.println("Thread is running on client");
+    String messageGotten = "";
+    while (socket.isConnected()) {
+      try {
+        messageGotten = bufferedReader.readLine();
+        if (messageGotten != null && !messageGotten.equals("")) {
+          System.out.println(messageGotten);
         }
+        this.data = messageGotten;
+      } catch (IOException e) {
+        closeEverything(socket, bufferedReader, bufferedWriter);
       }
-    }).start();
+    }
   }
 
   public void closeEverything(Socket socket, BufferedReader bufferedReader, BufferedWriter bufferedWriter) {
@@ -75,5 +63,4 @@ public class Client{
       e.printStackTrace();
     }
   }
-  
 }
