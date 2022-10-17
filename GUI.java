@@ -20,12 +20,13 @@ public class GUI {
     String lettersLeftDisplay = "<html>A B C D E F G H I J K<br/>L M N O P Q R S T U</html>";
     ArrayList<String> lettersLeft = new ArrayList<String>();
     boolean isInValid = true;
-//    BufferedImage[] bomb = [4];
-//    BufferedImage[] explosion = [5];
+    String[] names = new String[9];
+    String[] lives = new String[9];
+    String[] sentPrompt = new String[2];
 
     //building game window
     public GUI(){
-        createNameWindow();
+        //createNameWindow();
         createGameWindow();
     }
 
@@ -86,26 +87,26 @@ public class GUI {
         //game screen
         gameFrame = new JFrame("blow up bash!");
         grid = new GridLayout(6,3); //row, columns
-        playerOne = new JLabel("<html>Player 1<br/>lives:</html>");
-        playerTwo = new JLabel("<html>Player 2<br/>lives:</html>");
-        playerThree = new JLabel("<html>Player 3<br/>lives:</html>");
-        playerFour = new JLabel("<html>Player 4<br/>lives:</html>");
-        playerFive = new JLabel("<html>Player 5<br/>lives:</html>");
-        playerSix = new JLabel("<html>Player 6<br/>lives:</html>");
-        playerSeven = new JLabel("<html>Player 7<br/>lives:</html>");
-        playerEight = new JLabel("<html>Player 8<br/>lives:</html>");
+        playerOne = new JLabel("<html>Player 1<br/>lives: 3</html>");
+        playerTwo = new JLabel("<html>Player 2<br/>lives: 3</html>");
+        playerThree = new JLabel("<html>Player 3<br/>lives: 3</html>");
+        playerFour = new JLabel("<html>Player 4<br/>lives: 3</html>");
+        playerFive = new JLabel("<html>Player 5<br/>lives: 3</html>");
+        playerSix = new JLabel("<html>Player 6<br/>lives: 3</html>");
+        playerSeven = new JLabel("<html>Player 7<br/>lives: 3</html>");
+        playerEight = new JLabel("<html>Player 8<br/>lives: 3</html>");
+        //resizing bomb image to fit
         BufferedImage imgBomb = null;
         try {
             imgBomb = ImageIO.read(new File("images/bomb1.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Image dimgBomb = imgBomb.getScaledInstance(150, 150, Image.SCALE_SMOOTH); //resize dimensions currently hardcoded
+        Image dimgBomb = imgBomb.getScaledInstance(100, 100, Image.SCALE_SMOOTH); //resize dimensions currently hardcoded
         ImageIcon imageIconBomb = new ImageIcon(dimgBomb);
         bomb = new JLabel(imageIconBomb);
         letters = new JLabel(lettersLeftDisplay);
-        //resizing image to fit
-        //hearts = new JLabel();
+        //resizing heart image to fit
         BufferedImage img = null;
         try {
             img = ImageIO.read(new File("images/threeHearts.png"));
@@ -127,7 +128,7 @@ public class GUI {
         gameFrame.setLayout(grid);
         gameFrame.setLocationRelativeTo(null);
         gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        gameFrame.setVisible(false);
+        gameFrame.setVisible(true);
 
         gameFrame.add(playerOne);
         gameFrame.add(playerTwo);
@@ -138,14 +139,14 @@ public class GUI {
         gameFrame.add(playerSix);
         gameFrame.add(playerSeven);
         gameFrame.add(playerEight);
-        gameFrame.add(letters);
-        gameFrame.add(hearts);
         gameFrame.add(turnAnnouncement);
-        gameFrame.add(credits);
+        gameFrame.add(prompt);
+        gameFrame.add(wordDisplay);
+        gameFrame.add(letters);
         gameFrame.add(playerInput);
         gameFrame.add(enterButton);
-        gameFrame.add(wordDisplay);
-        gameFrame.add(prompt);
+        gameFrame.add(credits);
+        gameFrame.add(hearts);
         gameFrame.add(logo);
 
         enterButton.setActionCommand("enterButton");
@@ -162,8 +163,7 @@ public class GUI {
             System.out.println(pInput); //debug print
             playerInput.setText("");
             refresh();
-            updateLives(0);
-            bombTicking();
+            //bombExplode();
         }
     }
 
@@ -174,9 +174,6 @@ public class GUI {
             System.out.println(pInput); //debug print
             playerInput.setText("");
             refresh();
-            updateLives(2);
-//            String[] n = {"s", "a", "b", "c", "d", "e", "f", "g", "h"};
-//            setNames(n);
         }
     }
 
@@ -188,30 +185,39 @@ public class GUI {
             //System.out.println(lettersLeft.get(i));
         }
         letters.setText(lettersLeftDisplay); //displays letters left player's screen
-        refresh();
     }
 
-    //sets Player# labels to player names
-    public void setNames(String[] names){
-        //parameter will be name split by commas
-        playerOne.setText("<html>"+names[1]+"<br/>lives: 3</html>");
-        playerTwo.setText("<html>"+names[2]+"<br/>lives: 3</html>");
-        playerThree.setText("<html>"+names[3]+"<br/>lives: 3</html>");
-        playerFour.setText("<html>"+names[4]+"<br/>lives: 3</html>");
-        playerFive.setText("<html>"+names[5]+"<br/>lives: 3</html>");
-        playerSix.setText("<html>"+names[6]+"<br/>lives: 3</html>");
-        playerSeven.setText("<html>"+names[7]+"<br/>lives: 3</html>");
-        playerEight.setText("<html>"+names[8]+"<br/>lives: 3</html>");
+    //sets names[]
+    public void getNames(String[] n){
+        names = n;
+        //refresh();
     }
 
-    //global (?) refreshes GUI
+    //sets lives[]
+    public void getLives(String[] l){
+        lives = l;
+        //refresh();
+    }
+
+    public void getPrompt(String[] p){
+        sentPrompt = p;
+    }
+
+    public void setInputDisplay(String ipd){
+        wordDisplay.setText(ipd.trim());
+    }
+
+    //global refresh (word typed + prompt + current number of lives per player)
     public void refresh(){
-        wordDisplay.setText(pInput.trim()); //displays word inputed on screens
-    }
-
-    //sets prompt text
-    public void setPrompt(String p){
-        prompt.setText(p);
+        prompt.setText(sentPrompt[1]);
+        playerOne.setText("<html>"+names[1]+"<br/>lives: "+lives[1]+"</html>");
+        playerTwo.setText("<html>"+names[2]+"<br/>lives: "+lives[2]+"</html>");
+        playerThree.setText("<html>"+names[3]+"<br/>lives: "+lives[3]+"</html>");
+        playerFour.setText("<html>"+names[4]+"<br/>lives: "+lives[4]+"</html>");
+        playerFive.setText("<html>"+names[5]+"<br/>lives: "+lives[5]+"</html>");
+        playerSix.setText("<html>"+names[6]+"<br/>lives: "+lives[6]+"</html>");
+        playerSeven.setText("<html>"+names[7]+"<br/>lives: "+lives[7]+"</html>");
+        playerEight.setText("<html>"+names[8]+"<br/>lives: "+lives[8]+"</html>");
     }
 
     //changes the image of hearts based on # lives the player has
@@ -251,76 +257,21 @@ public class GUI {
     public void bombTicking(){
         BufferedImage imgBomb = null;
         try {
-            try {
-                imgBomb = ImageIO.read(new File("images/bomb2.png"));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            Image dimgBomb = imgBomb.getScaledInstance(150, 150, Image.SCALE_SMOOTH); //resize dimensions currently hardcoded
-            ImageIcon imageIconBomb = new ImageIcon(dimgBomb);
-            bomb.setIcon(imageIconBomb);
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
+            imgBomb = ImageIO.read(new File("images/bomb1.png"));
+        } catch (IOException e) {
             e.printStackTrace();
         }
-        try {
-            try {
-                imgBomb = ImageIO.read(new File("images/bomb3.png"));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            Image dimgBomb = imgBomb.getScaledInstance(150, 150, Image.SCALE_SMOOTH); //resize dimensions currently hardcoded
-            ImageIcon imageIconBomb = new ImageIcon(dimgBomb);
-            bomb.setIcon(imageIconBomb);
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        try {
-            try {
-                imgBomb = ImageIO.read(new File("images/bomb2.png"));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            Image dimgBomb = imgBomb.getScaledInstance(150, 150, Image.SCALE_SMOOTH); //resize dimensions currently hardcoded
-            ImageIcon imageIconBomb = new ImageIcon(dimgBomb);
-            bomb.setIcon(imageIconBomb);
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        try {
-            try {
-                imgBomb = ImageIO.read(new File("images/bomb1.png"));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            Image dimgBomb = imgBomb.getScaledInstance(150, 150, Image.SCALE_SMOOTH); //resize dimensions currently hardcoded
-            ImageIcon imageIconBomb = new ImageIcon(dimgBomb);
-            bomb.setIcon(imageIconBomb);
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        Image dimgBomb = imgBomb.getScaledInstance(150, 150, Image.SCALE_SMOOTH); //resize dimensions currently hardcoded
+        ImageIcon imageIconBomb = new ImageIcon(dimgBomb);
+        bomb.setIcon(imageIconBomb);
     }
 
     //bomb explosion animation
-    public void bombExplode(){
-        BufferedImage img = null;
-        try {
-            try {
-                img = ImageIO.read(new File("images/explosion1.png"));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            Image dimg = img.getScaledInstance(250, 500, Image.SCALE_SMOOTH); //resize dimensions currently hardcoded
-            ImageIcon imageIcon = new ImageIcon(dimg);
-            bomb.setIcon(imageIcon);
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
+//    public void bombExplode() throws MalformedURLException {
+//        URL url = this.getClass().getResource("images/explosion.gif");
+//        ImageIcon imageIcon = new ImageIcon(url);
+//        bomb.setIcon(imageIcon);
+//    }
 
     // returns player's input aka player's guess once it has been checked
     public String sendCInput() {
