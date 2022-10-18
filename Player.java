@@ -8,7 +8,8 @@ class Player {
   int lives = 3;
   ArrayList<String> lettersAvail = new ArrayList<String>();
   boolean isDead = false;
-  boolean isTurn = false; 
+  boolean isTurn = false;
+  static int nameAgain = 0;
   GUI gui;
   String guess = "";
   Client client;
@@ -16,14 +17,20 @@ class Player {
   Thread clientThread;
   int playerNumber;
 
-  public Player(String name) {
+  public Player() {
+    gui = new GUI();
+    do{
+      playerName = gui.getPlayerName();
+      if(playerName.equals("") && nameAgain > 0){
+        gui.updateNamePrompt();
+      }
+    }
+    while(playerName == null || playerName.equals(""));
     try {
       socket = new Socket("flippinnublet.com", 7268);
     } catch (IOException e) {
       e.printStackTrace();
     }
-    playerName = name;
-    gui = new GUI();
     client = new Client(socket);
     clientThread = new Thread(client);
     clientThread.start();
@@ -31,8 +38,8 @@ class Player {
     //   Thread.sleep(100);
     // } catch (InterruptedException e) {
     //   e.printStackTrace();
-    // } 
-    client.sendGuess(name);
+    // }
+    client.sendGuess(playerName);
     theLoop();
   }
 
@@ -61,37 +68,37 @@ class Player {
     lettersAvail.add("U");
   }
 
-    public int lifeRemove(boolean timeGone) {
-      if (timeGone) {
-        lives--;
+  public int lifeRemove(boolean timeGone) {
+    if (timeGone) {
+      lives--;
+    }
+    return lives;
+  }
+
+  public int lifeAdd() {
+    if (lettersAvail.size() == 0) {
+      lives++;
+    }
+    return lives;
+  }
+
+  public ArrayList<String> updateUsedLetters(String used) {
+    for (int i = 0; i < lettersAvail.size(); i++) {
+      String a = lettersAvail.get(i);
+      if (used.equals(a)) {
+        lettersAvail.remove(i);
       }
-      return lives;
     }
 
-    public int lifeAdd() {
-      if (lettersAvail.size() == 0) {
-        lives++; 
-      }
-      return lives;
+    if (lettersAvail.size() == 0) {
+      letterAdd();
     }
-
-    public ArrayList<String> updateUsedLetters(String used) {
-      for (int i = 0; i < lettersAvail.size(); i++) {
-        String a = lettersAvail.get(i);
-        if (used.equals(a)) {
-          lettersAvail.remove(i);
-        }
-      }
-
-      if (lettersAvail.size() == 0) {
-        letterAdd();
-      }
-      return lettersAvail;
-    }
+    return lettersAvail;
+  }
 
   public ArrayList<String> sendLetters() {
     return lettersAvail;
-  } 
+  }
 
   public void theLoop() {
     while (true) {
@@ -105,6 +112,7 @@ class Player {
         if (dataArr != null &&  !data.equals("turn")) {
           switch (dataArr[0].toLowerCase()) {
             case "prompt":
+              gui.bombTicking();
               gui.getPrompt(dataArr);
               break;
             case "names":
@@ -116,32 +124,34 @@ class Player {
               client.data = "";
               break;
             case "correct":
-              gui.setInputDisplay(dataArr[1]);
+              gui.setInputDisplay(dataArr);
               if (isTurn) {
-                System.out.println("YAY");
                 isTurn = false;
-              } else {
-                System.out.println("Other guy did good");
               }
               break;
             case "incorrect":
-              gui.setInputDisplay(dataArr[1]);
-              if (isTurn) {
-                System.out.println("AW");
-              } else {
-                System.out.println("Other oops");
-              }
+              gui.setInputDisplay(dataArr);
               break;
             case "timer":
               if (isTurn) {
                 lives--;
                 gui.updateLives(lives);
+                gui.bombExplode();
                 if (lives <= 0) {
                   isDead = true;
+                  gui.setTurn("ur dead :(");
                 }
                 isTurn = false;
+                gui.setTurn("Not your turn");
+              }
+              break;
+            case "turn":
+              if (dataArr[1].equals("true")) {
+                isTurn = true;
+                gui.setTurn("Your turn!");
               } else {
-                System.out.println("Other guy died");
+                isTurn = false;
+                gui.setTurn("Not your turn!");
               }
               break;
             default:
