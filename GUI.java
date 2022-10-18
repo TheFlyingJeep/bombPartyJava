@@ -16,7 +16,7 @@ public class GUI {
     JButton enterNameButton, enterButton;
     JPanel panelName;
 
-    String pInput, cInput;
+    String pInput, cInput, playerName;
     String lettersLeftDisplay = "<html>A B C D E F G H I J K<br/>L M N O P Q R S T U</html>";
     ArrayList<String> lettersLeft = new ArrayList<String>();
     boolean isInValid = true;
@@ -26,8 +26,9 @@ public class GUI {
 
     //building game window
     public GUI(){
-        //createNameWindow();
+        createNameWindow();
         createGameWindow();
+        //createRestartWindow();
     }
 
     //name input window
@@ -39,7 +40,7 @@ public class GUI {
         enterNameButton = new JButton("Enter");
 
         nameFrame.getContentPane().add(BorderLayout.NORTH, panelName);
-        nameFrame.setSize(500,100);
+        nameFrame.setSize(600,100);
         nameFrame.setLocationRelativeTo(null);
         nameFrame.setVisible(true);
         nameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -58,28 +59,32 @@ public class GUI {
     //action listener for enter button NAME SCREEN
     class nameEnterButtonListener implements ActionListener{
         public void actionPerformed(ActionEvent event){
-            String playerName = nameInput.getText();
+            playerName = nameInput.getText();
             nameInput.setText("");
-            getPlayerName(playerName);
-            nameFrame.setVisible(false);
-            gameFrame.setVisible(true);
+            Player.nameAgain++;
         }
     }
 
     //action listener for enter key NAME SCREEN
     class nameEnterKeyListener implements ActionListener{
         public void actionPerformed(ActionEvent event){
-            String playerName = nameInput.getText();
+            playerName = nameInput.getText();
             nameInput.setText("");
-            getPlayerName(playerName);
-            nameFrame.setVisible(false);
-            gameFrame.setVisible(true);
+            Player.nameAgain++;
         }
     }
 
-    public String getPlayerName(String name){
-        System.out.println(name);
-        return name;
+    public String getPlayerName(){
+        if (playerName == null || playerName.equals("")) {
+            return "";
+        }
+        nameFrame.setVisible(false);
+        gameFrame.setVisible(true);
+        return playerName = playerName.trim();
+    }
+
+    public void updateNamePrompt(){
+        namePrompt.setText("Name is not valid. Enter another name: ");
     }
 
     //game window
@@ -116,7 +121,7 @@ public class GUI {
         Image dimg = img.getScaledInstance(225, 150, Image.SCALE_SMOOTH); //resize dimensions currently hardcoded
         ImageIcon imageIcon = new ImageIcon(dimg);
         hearts = new JLabel(imageIcon);
-        turnAnnouncement = new JLabel("Player 1's turn");
+        turnAnnouncement = new JLabel("Not your turn.");
         credits = new JLabel("blow up bash! was inspired by JKLM's BombParty");
         playerInput = new JTextField();
         enterButton = new JButton("Enter");
@@ -128,7 +133,7 @@ public class GUI {
         gameFrame.setLayout(grid);
         gameFrame.setLocationRelativeTo(null);
         gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        gameFrame.setVisible(true);
+        gameFrame.setVisible(false);
 
         gameFrame.add(playerOne);
         gameFrame.add(playerTwo);
@@ -162,7 +167,7 @@ public class GUI {
             pInput = playerInput.getText();
             System.out.println(pInput); //debug print
             playerInput.setText("");
-            refresh();
+            //refresh();
             //bombExplode();
         }
     }
@@ -173,7 +178,7 @@ public class GUI {
             pInput = playerInput.getText();
             System.out.println(pInput); //debug print
             playerInput.setText("");
-            refresh();
+            //refresh();
         }
     }
 
@@ -201,10 +206,15 @@ public class GUI {
 
     public void getPrompt(String[] p){
         sentPrompt = p;
+        refresh();
     }
 
-    public void setInputDisplay(String ipd){
-        wordDisplay.setText(ipd.trim());
+    public void setTurn(String turn){
+        turnAnnouncement.setText(turn);
+    }
+
+    public void setInputDisplay(String[] ipd){
+        wordDisplay.setText(ipd[0] + ": " + ipd[1]);
     }
 
     //global refresh (word typed + prompt + current number of lives per player)
@@ -261,17 +271,23 @@ public class GUI {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Image dimgBomb = imgBomb.getScaledInstance(150, 150, Image.SCALE_SMOOTH); //resize dimensions currently hardcoded
+        Image dimgBomb = imgBomb.getScaledInstance(100, 100, Image.SCALE_SMOOTH); //resize dimensions currently hardcoded
         ImageIcon imageIconBomb = new ImageIcon(dimgBomb);
         bomb.setIcon(imageIconBomb);
     }
 
     //bomb explosion animation
-//    public void bombExplode() throws MalformedURLException {
-//        URL url = this.getClass().getResource("images/explosion.gif");
-//        ImageIcon imageIcon = new ImageIcon(url);
-//        bomb.setIcon(imageIcon);
-//    }
+    public void bombExplode() {
+        BufferedImage imgBomb = null;
+        try {
+            imgBomb = ImageIO.read(new File("images/explosion5.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Image dimgBomb = imgBomb.getScaledInstance(100, 100, Image.SCALE_SMOOTH); //resize dimensions currently hardcoded
+        ImageIcon imageIconBomb = new ImageIcon(dimgBomb);
+        bomb.setIcon(imageIconBomb);
+    }
 
     // returns player's input aka player's guess once it has been checked
     public String sendCInput() {
@@ -280,9 +296,9 @@ public class GUI {
         } else {
             cInput = pInput.trim();
         }
-        if (cInput != null && cInput != "") {
-            // System.out.println(cInput);
-        }
+//        if (cInput != null && cInput != "") {
+//            // System.out.println(cInput);
+//        }
         return cInput;
     }
 
